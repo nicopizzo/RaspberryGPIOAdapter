@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Gpio.Adapter;
 using Gpio.Implemention;
 using Gpio.Abstract;
+using Microsoft.Extensions.Options;
+using RiPi.Api.Models;
 
 namespace RasPiApi.Controllers
 {
@@ -12,10 +14,9 @@ namespace RasPiApi.Controllers
     {
         private GpioAdapter _gpioAdapter;
 
-        public PinsController()
+        public PinsController(IOptions<AppSettings> settings)
         {
-            //_gpioAdapter = new GpioAdapter(PackageFinder.FindPackageDirectory());
-            _gpioAdapter = new GpioAdapter(@"C:\Data\SharedData\GPIO");
+            _gpioAdapter = new GpioAdapter(settings.Value.PinFileDirectory);
         }
 
         [HttpGet]

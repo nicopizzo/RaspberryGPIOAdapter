@@ -32,12 +32,8 @@ namespace Gpio.Adapter
         public GpioAdapter(string directory, short[] availablePins)
         {
             AvailiblePins = availablePins;
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
+            if (!Directory.Exists(directory)) throw new DirectoryNotFoundException(directory + " not found.");
             _directory = new DirectoryInfo(directory);
-
             _pinKeyPairs = GetPinDictionary();
         }
 
