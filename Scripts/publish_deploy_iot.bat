@@ -1,0 +1,1 @@
+powershell -command "D:\Projects\Scripts\publish_deploy_iot.ps1 'D:\Projects\RaspberryGPIOAdapter\RiPi.Api' '\\raspi\c$\Data\USERS\Administrator\RPiApi'"
