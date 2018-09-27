@@ -1,1 +1,1 @@
-﻿C:\\Data\\SharedData\\GPIO
+﻿C:\Data\SharedData\GPIO

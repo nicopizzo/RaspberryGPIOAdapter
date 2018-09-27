@@ -42,9 +42,12 @@ namespace Gpio.Adapter
             return _pinKeyPairs[pinId];
         }
 
-        public bool UpdatePin(IPin pin)
+        public bool UpdatePins(IEnumerable<IPin> pins)
         {
-            _pinKeyPairs[pin.PinNo] = pin as Pin;
+            foreach(var pin in pins)
+            {
+                _pinKeyPairs[pin.PinNo] = pin as Pin;
+            }
             UpdatePinFile(_pinKeyPairs);
             return true;
         }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Storage;
 
@@ -10,12 +12,28 @@ namespace RpiGpioAdapter
     {
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
-            var packageFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
-            var sampleFile = await packageFolder.GetFileAsync("PinSettingLocation.txt");
-            var folder = await FileIO.ReadTextAsync(sampleFile);
-            GpioHandler gpioHandler = new GpioHandler(folder);
+            string directory = string.Empty;
+            try
+            {
+                directory = await GetPinFolder();
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                Debug.WriteLine("Trying again...");
+                directory = await GetPinFolder();
+            }
+         
+            GpioHandler gpioHandler = new GpioHandler(directory);
             gpioHandler.InitPins();
             while (true) { }
+        }
+
+        private async Task<string> GetPinFolder()
+        {
+            var packageFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+            var sampleFile = await packageFolder.GetFileAsync("PinSettingLocation.txt");
+            return await FileIO.ReadTextAsync(sampleFile);
         }
     }
 }

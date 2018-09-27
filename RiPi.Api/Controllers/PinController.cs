@@ -5,6 +5,7 @@ using Gpio.Implemention;
 using Gpio.Abstract;
 using Microsoft.Extensions.Options;
 using RiPi.Api.Models;
+using System.Collections.Generic;
 
 namespace RasPiApi.Controllers
 {
@@ -29,17 +30,33 @@ namespace RasPiApi.Controllers
         }
 
         [HttpGet]
-        [Route("Set/{id}/{status}")]
-        public bool Set(int id, int status)
+        [Route("SetValue/{id}/{value}")]
+        public bool SetValue(int id, PinValue value)
         {
-            Console.WriteLine("About to change pin status.");
-            var pin = new Pin()
-            {
-                PinNo = (short)id,
-                Direction = PinDirection.Out,
-                Value = (PinValue)status
-            };
-            _gpioAdapter.UpdatePin(pin);
+            Console.WriteLine("About to change pin value.");
+            var pin = _gpioAdapter.GetPin((short)id);
+            pin.Value = value;
+            _gpioAdapter.UpdatePins(new List<IPin>() { pin });
+            return true;
+        }
+
+        [HttpGet]
+        [Route("SetDirection/{id}/{direction}")]
+        public bool SetDirection(int id, PinDirection direction)
+        {
+            Console.WriteLine("About to change pin direction.");
+            var pin = _gpioAdapter.GetPin((short)id);
+            pin.Direction = direction;
+            _gpioAdapter.UpdatePins(new List<IPin>() { pin });
+            return true;
+        }
+
+        [HttpPost]
+        [Route("SetPins")]
+        public bool SetPins(List<Pin> pins)
+        {
+            Console.WriteLine("About to update pins.");
+            _gpioAdapter.UpdatePins(pins);
             return true;
         }
     }
