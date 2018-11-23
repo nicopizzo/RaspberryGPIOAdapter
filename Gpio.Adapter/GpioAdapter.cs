@@ -12,6 +12,17 @@ namespace Gpio.Adapter
 
         public event EventHandler<PinEventArgs> PinSet;
         public short[] AvailiblePins { get; private set; }
+        public bool FileWatchingListening
+        {
+            get
+            {
+                return _fileWatcher.EnableRaisingEvents;
+            }
+            set
+            {
+                _fileWatcher.EnableRaisingEvents = value;
+            }
+        }
 
         private DirectoryInfo _directory;
         private FileSystemWatcher _fileWatcher;
@@ -35,6 +46,7 @@ namespace Gpio.Adapter
             if (!Directory.Exists(directory)) throw new DirectoryNotFoundException(directory + " not found.");
             _directory = new DirectoryInfo(directory);
             _pinKeyPairs = GetPinDictionary();
+            InitFileWatcher();
         }
 
         public IPin GetPin(short pinId)
@@ -52,15 +64,14 @@ namespace Gpio.Adapter
             return true;
         }
 
-        public void InitFileWatcher()
+        private void InitFileWatcher()
         {
             _fileWatcher = new FileSystemWatcher(_directory.FullName);
             _fileWatcher.NotifyFilter = NotifyFilters.LastWrite;
             _fileWatcher.Filter = "PinMappings.json";
             _fileWatcher.Changed += HandleFileChanged;
-            _fileWatcher.EnableRaisingEvents = true;
         }
-
+        
         private Dictionary<short, Pin> GetPinDictionary()
         {
             Dictionary<short, Pin> pins;

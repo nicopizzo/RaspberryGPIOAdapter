@@ -23,7 +23,7 @@ namespace RpiGpioAdapter
 
             _adapter = new GpioAdapter(directory);
             _adapter.PinSet += _adapter_PinSet;
-            _adapter.InitFileWatcher();
+            _adapter.FileWatchingListening = true;
         }
 
         public void InitPins()

@@ -9,7 +9,7 @@ namespace TestRunner
         {
             var bin = Environment.CurrentDirectory;
             var adapter = new Gpio.Adapter.GpioAdapter(bin);
-
+            adapter.FileWatchingListening = true;
             Console.ReadLine();
         }
     }

@@ -1,7 +1,6 @@
 ﻿using Gpio.Abstract;
+using Gpio.Implemention;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Gpio.Adapter
 {
@@ -12,6 +11,16 @@ namespace Gpio.Adapter
         public PinEventArgs(IPin pin)
         {
             Pin = pin;
+        }
+
+        public PinEventArgs(short pinNo, int pinValue, int pinDirection)
+        {
+            Pin = new Pin()
+            {
+                PinNo = pinNo,
+                Value = (PinValue)pinValue,
+                Direction = (PinDirection)pinDirection
+            };
         }
     }
 }
